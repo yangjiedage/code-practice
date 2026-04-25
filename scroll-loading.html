@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container {
+      height: 400px;
+      overflow: auto;
+      background-color: pink;
+    }
+    .item {
+      height: 50px;
+      background-color: aliceblue;
+      border-bottom: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+    <div class="item">7</div>
+    <div class="item">8</div>
+    <div class="item">9</div>
+    <div class="item">10</div>
+  </div>
+</body>
+<script>
+  function loadMoreData() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const items = Array.from({ length: 5 }, (_, index) => {
+          const item = document.createElement('div');
+          item.classList.add('item');
+          item.textContent = (Number(document.querySelector('.item').textContent) + index + 1).toString();
+          return item;
+        });
+        items.forEach(item => {
+          document.querySelector('.container').appendChild(item);
+        })
+        resolve();
+      }, 1000);
+    })
+  }
+  // 简单高效的触底判断
+  let isLoading = false;
+  document.querySelector('.container').addEventListener('scroll', () => {
+  // 距离底部 200px 时触发
+  const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 200;
+  
+  if (nearBottom && !isLoading) {
+    isLoading = true;
+    loadMoreData().then(() => {
+      isLoading = false;
+    });
+  }
+});
+</script>
+</html>
