@@ -178,3 +178,15 @@ MyPromise.reject('err!!').finally((res) => {
 //     console.log('promise4 reject', err);
 // })
 
+
+MyPromise.resolve('p1').then(res => {
+  console.log('res1', res);
+  throw 'reject111'
+}).then(null, (reject) => {
+  console.log('reject2', reject);
+  return 'res2'
+}).finally((res) => {
+  console.log('final3', res)
+}).then(res => {
+  console.log('res4', res)
+})

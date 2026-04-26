@@ -19,26 +19,21 @@
  * @return {TreeNode}
  */
 var lowestCommonAncestor = function(root, p, q) {
-  if (!root) {
-    return null;
+  if (!root || root.val === p.val || root.val === q.val) {
+    return root;
   }
+  let leftFind = lowestCommonAncestor(root.left, p, q);
+  let rightFind = lowestCommonAncestor(root.right, p, q);
 
-  console.log(root.val);
-  // if (root === p || root === q) {
-  //   return root;
-  // }
-  const left = lowestCommonAncestor(root.left, p, q);
-  const right = lowestCommonAncestor(root.right, p, q);
-
-  // if (left && right) {
-  //   return root;
-  // }
-  // if (left) {
-  //   return left;
-  // }
-  // if (right) {
-  //   return right;
-  // }
+  if (leftFind && rightFind) {
+    return root;
+  }
+  if (leftFind) {
+    return leftFind
+  }
+  if (rightFind) {
+    return rightFind
+  }
 };
 
 /**
