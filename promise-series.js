@@ -28,7 +28,34 @@ const tasks = [
   () => new Promise((resolve, reject) => setTimeout(reject, 1000, '任务2失败')),
   () => new Promise((resolve, reject) => setTimeout(resolve, 1000, '任务3完成'))
 ];
-promiseSeries(tasks, 2)
+// promiseSeries(tasks, 2)
+//   .then(() => console.log('所有任务完成'))
+//   .catch((error) => console.log(`执行失败：${error}`));
+
+function hhh(tasks, retryTimes) {
+  function runTaskWithRetry(task, retryCount) {
+    return new Promise((resolve, reject) => {
+      task().then((res) => {
+        console.log(`任务完成: ${res}`);
+        return resolve(res);
+      }).catch((err) => {
+        if (retryCount > 0) {
+          console.log(`任务失败，正在重试... 剩余重试次数：${retryCount - 1}`);
+          runTaskWithRetry(task, retryCount - 1).then(resolve).catch(reject);
+        }else {
+          reject(err);
+        }
+      });
+    })
+  }
+
+ let result = Promise.resolve();
+ for(let i = 0; i < tasks.length; i++) {
+  result = result.then(() => runTaskWithRetry(tasks[i], retryTimes));
+ }
+ return result;
+}
+
+hhh(tasks, 2)
   .then(() => console.log('所有任务完成'))
   .catch((error) => console.log(`执行失败：${error}`));
-

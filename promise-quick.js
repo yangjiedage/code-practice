@@ -18,6 +18,29 @@ function promiseQuick(tasks) {
   });
 }
 
+
+function promiseQ(tasks) {
+  let result = new Array(tasks.length);
+  let completed = new Array(tasks.length).fill(false);
+  let lastCompletedIndex = 0;
+
+
+  tasks.forEach((task, index) => {
+    task().then(res => {
+      result[index] = res;
+      completed[index] = true;
+      console.log(`任务${index + 1}完成: ${res}`, completed, result);
+      // 关键逻辑：尝试按顺序打印，
+      //lastCompletedIndex记录的上一个完成的位置，每次都去检查下一个位置是否完成就打印
+      while(lastCompletedIndex < tasks.length && completed[lastCompletedIndex]) {
+        console.log(`任务 ${lastCompletedIndex + 1} 结果:`, result[lastCompletedIndex]);
+        lastCompletedIndex++;
+      }
+    })
+  });
+
+}
+
 const sleep = (ms, val) => () => new Promise(resolve => setTimeout(() => resolve(val), ms));
 
 const taskList = [
