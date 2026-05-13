@@ -92,7 +92,7 @@ const obj1 = {
 }
 
 const shallowObj = shallowCopy(obj1);
-const deepObj = deepCopy(obj1);
+const deepObj = deepCopy(obj1); 
 
 console.log(shallowObj.b === obj1.b)
 console.log(deepObj, deepObj.b === obj1.b)
